@@ -1,0 +1,1 @@
+<packaging>pom</packaging>

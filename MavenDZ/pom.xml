@@ -26,6 +26,9 @@
         <module>db</module>
         <module>api</module>
         <module>service</module>
+        <module>db</module>
+        <module>api</module>
+        <module>service</module>
     </modules>
     <packaging>pom</packaging>
 

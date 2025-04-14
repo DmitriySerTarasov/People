@@ -1,4 +1,3 @@
-import java.util.Optional;
 import java.util.OptionalInt;
 
 class Person {
@@ -15,7 +14,7 @@ class Person {
     public Person(String name, String surname, int age) {
         this(name, surname);
         if (age < 0) {
-            throw new IllegalStateException("Возраст не может быть отрицательным");
+            throw new IllegalArgumentException("Возраст не может быть отрицательным");
         }
         this.age = OptionalInt.of(age);
     }
@@ -37,7 +36,7 @@ class Person {
     }
 
     public OptionalInt getAge() {
-        return age;
+        return age; // Возвращаем OptionalInt, чтобы избежать null
     }
 
     public String getAddress() {
@@ -56,14 +55,15 @@ class Person {
 
     @Override
     public String toString() {
-        return name + " " + surname + (age.isPresent() ? ", возраст: " + age.getAsInt() : ", возраст не известен") +
-                (address != null ? ", город: " + address : " ");
+        return name + " " + surname +
+                (age.isPresent() ? ", возраст: " + age.getAsInt() : ", возраст не известен") +
+                (address != null ? ", город: " + address : "");
     }
 
     public PersonBuilder newChildBuilder() {
         return new PersonBuilder()
                 .setSurname(this.surname)
-                .setAge(0)
+                .setAge(0) // Устанавливаем возраст ребенка как 0
                 .setAddress(this.address);
     }
 }
@@ -86,7 +86,7 @@ class PersonBuilder {
 
     public PersonBuilder setAge(int age) {
         if (age < 0) {
-            throw new IllegalStateException("Возраст не может быть отрицательным");
+            throw new IllegalArgumentException("Возраст не может быть отрицательным");
         }
         this.age = age;
         return this;
@@ -106,7 +106,6 @@ class PersonBuilder {
         }
         return new Person(name, surname);
     }
-
 }
 
 public class Main {
@@ -117,15 +116,19 @@ public class Main {
                 .setAge(31)
                 .setAddress("Сидней")
                 .build();
+
         Person son = mom.newChildBuilder()
                 .setName("Антошка")
                 .build();
+
         System.out.println("У " + mom + " есть сын, " + son);
+
         try {
             new PersonBuilder().build();
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
+
         try {
             new PersonBuilder().setAge(-100).build();
         } catch (IllegalArgumentException e) {
